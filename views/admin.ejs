@@ -1,1 +1,25 @@
 <h1>Hello admin</h1>
+
+<ul>
+  <% for(var user of data) { %>
+    <p>User: </p>
+    <li>
+      <%= user.userID %>
+    </li>
+    <li>
+      <%= user.role %>
+    </li>
+    <li>
+      <%= user.name %>
+    </li>
+    <li>
+      <%= user.password %>
+    </li>
+    <p>-----------------------</p>
+
+    <% } %>
+</ul>
+
+
+
+<!-- <div class="users"></div> -->

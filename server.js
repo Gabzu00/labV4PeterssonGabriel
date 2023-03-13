@@ -11,6 +11,7 @@ const database = require('./database');
 var currentKey = ""
 var currentPassoword = ""
 var role
+var data
 
 app.listen(8000)
 
@@ -27,6 +28,7 @@ app.post('/LOGIN', async (req, res) => {
   let password = req.body.password;
   try {
     const rows = await database.getName(name);
+    data = rows
     if (typeof rows !== 'undefined' && rows.length === 0) {
       console.log("Not an existing user");
       res.sendStatus(401);
@@ -70,16 +72,47 @@ function authenticateToken(req, res, next) {
 }
 
 app.get('/granted', authenticateToken, (req, res) => {
-  res.render('start.ejs')
+  res.render('start.ejs', {
+    role
+  })
 })
 
-app.get('/admin', authenticateToken, (req, res) => {
+app.get('/admin', authenticateToken, async (req, res) => {
   if (role === "admin") {
-    res.render('admin.ejs')
+    var data = await database.getUsers()
+    res.render('admin.ejs', {
+      data
+    })
   } else {
-    res.sendStatus(401)
+    res.render('notAllowed.ejs')
   }
 })
+
+
+app.get('/student1', authenticateToken, (req, res) => {
+  if (data[0].name === "user2") {
+    res.render('notAllowed.ejs')
+  } else {
+    res.render('student1.ejs')
+  }
+})
+
+app.get('/student2', authenticateToken, (req, res) => {
+  if (data[0].name === "user1") {
+    res.render('notAllowed.ejs')
+  } else {
+    res.render('student2.ejs')
+  }
+})
+
+app.get('/teacher', authenticateToken, (req, res) => {
+  if (data[0].name === "user1" || data[0].name === "user2") {
+    res.render('notAllowed.ejs')
+  } else {
+    res.render('teacher.ejs')
+  }
+})
+
 
 
 
@@ -103,12 +136,17 @@ app.post('/REGISTER', async (req, res) => {
 
 })
 
-app.get('/REGISTER', (req, res) => {
+function loggedIn(req, res, next) {
+  if (currentKey == "") {
+    next()
+  } else {
+    res.render('notAllowed.ejs')
+  }
+}
+
+app.get('/REGISTER', loggedIn, (req, res) => {
   res.render('register.ejs')
 })
-
-
-
 
 
 

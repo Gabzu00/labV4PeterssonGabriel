@@ -1,3 +1,20 @@
 <h1>Welcome!!</h1>
 
-<a href="/admin">ADMIN MODE</a>
+<ul>
+  <li>
+    <a href="/student1">Render student1</a>
+  </li>
+
+  <li>
+    <a href="/student2">Render student2</a>
+  </li>
+
+  <li>
+    <a href="/teacher">Render teacher</a>
+  </li>
+
+</ul>
+
+<% if(role==="admin" ) { %>
+  <a href="/admin">ADMIN MODE</a>
+  <% } %>

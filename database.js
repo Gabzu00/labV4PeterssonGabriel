@@ -62,6 +62,18 @@ const getName = (name) => {
   })
 }
 
+function getUsers() {
+  var db = connect();
+  return new Promise((resolve, reject) => {
+    var sql = 'SELECT * FROM Users';
+    db.all(sql, [], (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows);
+    })
+  })
+}
+
 module.exports = {
   getName,
+  getUsers
 }
